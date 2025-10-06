@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace J_Tools
 {
-    public static class JWeight
+    public static class JRandom
     {
-        public static T WeightSelect<T>(this IReadOnlyCollection<T> list) where T : IWeighted
+        public static T RandomWeight<T>(this IReadOnlyCollection<T> list) where T : IWeighted
         {
             if (list.IsNull() || list.Count == 0) return default;
             int totalWeight = list.Sum(item => item.Weight);
@@ -26,7 +26,21 @@ namespace J_Tools
 
             return list.First();
         }
-        
+
+        public static List<T> RandomSelects<T>(this IReadOnlyCollection<T> list, int count)
+        {
+            if (list.IsNull() || list.Count == 0 || count <= 0) return new List<T>();
+            if (count >= list.Count) return list.ToList();
+            List<T> tempList = list.ToList();
+            tempList.ShuffleList();
+            List<T> result = new List<T>();
+            for (int i = 0; i < count; i++)
+            {
+                result.Add(tempList[i]);
+            }
+
+            return result;
+        }
     }
 
     public interface IWeighted
